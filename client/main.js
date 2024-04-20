@@ -6,7 +6,14 @@ import "./style.css";
 // Will eventually store the authenticated user's access_token
 let auth;
 
-const discordSdk = new DiscordSDK(import.meta.env.VITE_DISCORD_CLIENT_ID);
+// const discordSdk = new DiscordSDK(import.meta.env.VITE_DISCORD_CLIENT_ID);
+let discordSdk;
+try{
+  discordSdk = new DiscordSDK(import.meta.env.VITE_DISCORD_CLIENT_ID);
+} catch (error) {
+  console.error("Discord SDK failed to initialize", error);
+}
+
 
 setupDiscordSdk().then(() => {
   console.log("Discord SDK is authenticated");
@@ -19,7 +26,14 @@ setupDiscordSdk().then(() => {
 });
 
 async function setupDiscordSdk() {
-  await discordSdk.ready();
+  try{
+
+    await discordSdk.ready();
+  }
+  catch (error) {
+    console.error("asdfasdfDiscord SDK failed to initialize", error);
+    return;
+  }
   console.log("Discord SDK is ready");
 
   // Authorize with Discord Client
