@@ -1,5 +1,6 @@
 import { DiscordSDK } from "@discord/embedded-app-sdk";
 
+// deno-error-ignore
 import rocketLogo from '/rocket.png';
 import "./style.css";
 
@@ -8,7 +9,7 @@ let auth;
 
 // const discordSdk = new DiscordSDK(import.meta.env.VITE_DISCORD_CLIENT_ID);
 let discordSdk;
-try{
+try {
   discordSdk = new DiscordSDK(import.meta.env.VITE_DISCORD_CLIENT_ID);
 } catch (error) {
   console.error("Discord SDK failed to initialize", error);
@@ -26,7 +27,7 @@ setupDiscordSdk().then(() => {
 });
 
 async function setupDiscordSdk() {
-  try{
+  try {
 
     await discordSdk.ready();
   }
@@ -71,9 +72,9 @@ async function setupDiscordSdk() {
 }
 
 document.querySelector('#app').innerHTML = `
-  <div>
+    <div>
     <img src="${rocketLogo}" class="logo" alt="Discord" />
-    <h1>Hello, World!</h1>
+    <h1>You are being hacked :scream:!</h1>
   </div>
 `;
 
@@ -86,7 +87,7 @@ async function appendVoiceChannelName() {
   // the dm_channels.read scope which requires Discord approval.
   if (discordSdk.channelId != null && discordSdk.guildId != null) {
     // Over RPC collect info about the channel
-    const channel = await discordSdk.commands.getChannel({channel_id: discordSdk.channelId});
+    const channel = await discordSdk.commands.getChannel({ channel_id: discordSdk.channelId });
     if (channel.name != null) {
       activityChannelName = channel.name;
     }

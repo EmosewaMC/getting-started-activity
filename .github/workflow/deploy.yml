@@ -1,0 +1,40 @@
+name: Deploy
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: main
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write # Needed for auth with Deno Deploy
+      contents: read # Needed to clone the repository
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Build step
+        env:
+          VITE_DISCORD_CLIENT_ID: ${{ secrets.VITE_DISCORD_CLIENT_ID }}
+          VITE_DISCORD_CLIENT_SECRET: ${{ secrets.VITE_DISCORD_CLIENT_SECRET }}
+        run: "deno task serve" # 📝 Update the build command(s) if necessary
+
+      - name: run client
+        run: "deno task client"
+
+      - name: Upload to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: "jobhunt" # 📝 Update the deploy project name if necessary
+          entrypoint: "./server/server.ts" # 📝 Update the entrypoint if necessary
+ 
